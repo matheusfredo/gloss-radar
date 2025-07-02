@@ -11,8 +11,12 @@ export default function Map() {
     if (!loaded || !mapRef.current) return;
 
     const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: -15.7797, lng: -47.9297 },
+      center: { lat: -15.7797, lng: -47.9297 }, // Fallback: Brasília
       zoom: 5,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      zoomControl: true,
       styles: [
         {
           elementType: "geometry",
@@ -38,8 +42,7 @@ export default function Map() {
         },
         {
           featureType: "poi",
-          elementType: "labels.text.fill",
-          stylers: [{ color: "#6f9ba5" }],
+          stylers: [{ visibility: "off" }],
         },
         {
           featureType: "road",
@@ -54,12 +57,41 @@ export default function Map() {
       ],
     });
 
+    // Tentativa de geolocalização do usuário
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          map.setCenter(userLocation);
+          map.setZoom(14);
+
+          new window.google.maps.Marker({
+            position: userLocation,
+            map,
+            title: "Você está aqui",
+            icon: {
+              url: "/assets/my-location.png", // Substitua por seu ícone
+              scaledSize: new window.google.maps.Size(32, 32),
+            },
+          });
+        },
+        (error) => {
+          console.warn("Erro ao obter localização do usuário:", error.message);
+        }
+      );
+    }
+
+    // Exemplo de outro marcador
     new window.google.maps.Marker({
-      position: { lat: -23.5505, lng: -46.6333 },
+      position: { lat: -23.5505, lng: -46.6333 }, // São Paulo
       map,
       title: "Divina Beleza Studio",
       icon: {
-        url: "/assets/marker-zara.png",
+        url: "/assets/marker-zara.png", // Ícone do salão
         scaledSize: new window.google.maps.Size(40, 40),
       },
     });
