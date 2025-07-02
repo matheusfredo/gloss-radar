@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 export default function useGoogleMaps() {
@@ -8,18 +6,9 @@ export default function useGoogleMaps() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const checkIfLoaded = () => {
-      if (window.google && window.google.maps) {
-        setLoaded(true);
-      } else {
-        // Aguarda mais um pouco e tenta de novo (fallback)
-        setTimeout(checkIfLoaded, 100);
-      }
-    };
-
     const existingScript = document.getElementById("google-maps-script");
     if (existingScript) {
-      checkIfLoaded();
+      setLoaded(true);
       return;
     }
 

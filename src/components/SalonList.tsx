@@ -11,11 +11,24 @@ const fakeSalons = Array.from({ length: 8 }, (_, i) => ({
   stock: true,
 }));
 
-export default function SalonList() {
+interface SalonListProps {
+  searchQuery: string;
+}
+
+export default function SalonList({ searchQuery }: SalonListProps) {
+  const filteredSalons = fakeSalons.filter((salon) =>
+    salon.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <ScrollArea className="h-full pr-4">
       <div className="space-y-4">
-        {fakeSalons.map((salon) => (
+        {filteredSalons.length === 0 && (
+          <p className="text-zinc-400 text-sm italic">
+            Nenhum salão encontrado...
+          </p>
+        )}
+        {filteredSalons.map((salon) => (
           <div key={salon.id} className="border-b border-zinc-700 pb-4">
             <h3 className="text-lg font-semibold">{salon.name}</h3>
             <p className="text-sm text-zinc-300">{salon.address}</p>

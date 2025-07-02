@@ -10,7 +10,7 @@ export default function MapPage() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    console.log("🔎 Buscando por:", query);
+    console.log("🔍 Buscando por:", query);
   };
 
   return (
@@ -22,7 +22,9 @@ export default function MapPage() {
           <Map />
         </div>
 
-        <aside className="w-[320px] bg-black overflow-y-auto p-4 border-l border-zinc-800"></aside>
+        <aside className="w-[320px] bg-black overflow-y-auto p-4 border-l border-zinc-800">
+          <SalonList searchQuery={searchQuery} />
+        </aside>
       </div>
     </div>
   );
